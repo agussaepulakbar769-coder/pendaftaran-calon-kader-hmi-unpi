@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open Rekrutmen Kader HMI Komisariat UNPI</title>
+  <style>
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, sans-serif;
+      background: #07110d;
+      color: #f4fff9;
+      min-height: 100vh
+    }
+
+    :root {
+      --green: #16b866;
+      --green2: #0b8f4c;
+      --card: #0d1c16;
+      --muted: #a9bbb2
+    }
+
+    .wrap {
+      max-width: 900px;
+      margin: auto;
+      padding: 28px 16px 60px
+    }
+
+    .brand {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 24px
+    }
+
+    .mark {
+      width: 44px;
+      height: 44px;
+      border: 1px solid #29d57b;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: #42e58e
+    }
+
+    .brand b {
+      display: block
+    }
+
+    .brand small {
+      color: var(--muted)
+    }
+
+    .hero {
+      padding: 32px 0 20px
+    }
+
+    .hero h1 {
+      font-size: clamp(30px, 6vw, 54px);
+      line-height: 1.02;
+      margin: 0 0 14px
+    }
+
+    .hero p {
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 700px
+    }
+
+    .card {
+      background: linear-gradient(145deg, #10231a, #0a1712);
+      border: 1px solid #1b3b2c;
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 20px 70px #0008
+    }
+
+    .progress {
+      height: 8px;
+      background: #173126;
+      border-radius: 99px;
+      overflow: hidden
+    }
+
+    .bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green2), #42e58e);
+      width: 8.33%;
+      transition: .3s
+    }
+
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 13px;
+      margin: 10px 0 24px
+    }
+
+    .step {
+      display: none
+    }
+
+    .step.active {
+      display: block
+    }
+
+    .step h2 {
+      margin: 0 0 7px;
+      font-size: 25px
+    }
+
+    .desc {
+      color: var(--muted);
+      margin: 0 0 22px;
+      line-height: 1.6
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px
+    }
+
+    .field {
+      margin-bottom: 16px
+    }
+
+    .full {
+      grid-column: 1/-1
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 8px
+    }
+
+    label span {
+      color: #ffcf68;
+      font-size: 12px;
+      margin-left: 4px
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      background: #08140f;
+      border: 1px solid #294b3a;
+      color: #fff;
+      border-radius: 12px;
+      padding: 13px 14px;
+      font: inherit;
+      outline: none
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px #16b86622
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical
+    }
+
+    .options {
+      display: grid;
+      gap: 10px
+    }
+
+    .opt {
+      border: 1px solid #294b3a;
+      border-radius: 13px;
+      padding: 12px;
+      background: #091710;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start
+    }
+
+    .opt input {
+      width: auto;
+      margin-top: 3px;
+      accent-color: var(--green)
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 25px
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 12px;
+      padding: 13px 20px;
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 15px
+    }
+
+    .back {
+      background: #172820;
+      color: #dcebe4
+    }
+
+    .next,
+    .submit {
+      background: linear-gradient(135deg, var(--green2), var(--green));
+      color: white
+    }
+
+    .notice {
+      padding: 13px 15px;
+      border-radius: 12px;
+      background: #10291d;
+      border: 1px solid #215d3e;
+      color: #bff4d5;
+      margin-bottom: 18px;
+      line-height: 1.5
+    }
+
+    .hidden {
+      display: none !important
+    }
+
+    .success {
+      text-align: center;
+      padding: 40px 10px
+    }
+
+    .check {
+      font-size: 54px;
+      color: #43e58e
+    }
+
+    .success h2 {
+      font-size: 30px
+    }
+
+    .muted {
+      color: var(--muted);
+      line-height: 1.7
+    }
+
+    @media(max-width:650px) {
+      .grid {
+        grid-template-columns: 1fr
+      }
+
+      .full {
+        grid-column: auto
+      }
+
+      .card {
+        padding: 18px
+      }
+
+      .hero {
+        padding-top: 15px
+      }
+
+      .nav .btn {
+        flex: 1
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="brand">
+      <div class="mark"><img src="logo.jpeg" width="35 px" display="center"></div>
+      <div><b>HMI KOMISARIAT UNPI</b><small>CABANG CIANJUR</small></div>
+    </div>
+    <section class="hero">
+      <h1>Open Rekrutmen<br>Kader HMI</h1>
+      <p>Formulir pendaftaran calon kader HMI Komisariat UNPI. Isi data dengan benar dan lengkap. Data digunakan untuk
+        keperluan administrasi, komunikasi, dan proses seleksi.</p>
+    </section>
+
+    <div class="card" id="formCard">
+      <div class="progress">
+        <div class="bar" id="bar"></div>
+      </div>
+      <div class="meta"><span id="stepLabel">Langkah 1 dari 12</span><span id="percent">8%</span></div>
+      <form id="form">
+        <section class="step active" data-title="Data Pribadi">
+          <h2>Data Pribadi</h2>
+          <p class="desc">Lengkapi identitas dasar kamu.</p>
+          <div class="grid">
+            <div class="field"><label>Nama Lengkap <span>*</span></label><input name="nama" required></div>
+            <div class="field"><label>Nama Panggilan <span>*</span></label><input name="panggilan" required></div>
+            <div class="field"><label>NIM <span>*</span></label><input name="nim" required></div>
+            <div class="field"><label>Program Studi <span>*</span></label><select name="prodi" required>
+                <option value="">Pilih</option>
+                <option>Teknik Informatika</option>
+                <option>sastra inggis</option>
+                <option>Manajemen</option>
+                <option>Akuntansi</option>
+                <option>Ilmu Komunikasi</option>
+                <option>Lainnya</option>
+              </select></div>
+            <div class="field"><label>Fakultas <span>*</span></label><input name="fakultas" required></div>
+            <div class="field"><label>Angkatan <span>*</span></label><select name="angkatan" required>
+                <option value="">Pilih</option>
+                <option>2026</option>
+                <option>2025</option>
+                <option>2024</option>
+                <option>2023</option>
+                <option>2022</option>
+                <option>Lainnya</option>
+              </select></div>
+            <div class="field"><label>Jenis Kelamin <span>*</span></label>
+              <div class="options"><label class="opt"><input type="radio" name="gender" value="Laki-laki"
+                    required>Laki-laki</label><label class="opt"><input type="radio" name="gender"
+                    value="Perempuan">Perempuan</label></div>
+            </div>
+            <div class="field"><label>Tanggal Lahir <span>*</span></label><input type="date" name="tanggal_lahir"
+                required></div>
+            <div class="field full"><label>Alamat / Domisili Saat Ini <span>*</span></label><textarea name="alamat"
+                required></textarea></div>
+          </div>
+        </section>
+
+        <section class="step">
+          <h2>Kontak & Media Sosial</h2>
+          <p class="desc">Gunakan kontak yang aktif agar panitia dapat menghubungi kamu.</p>
+          <div class="grid">
+            <div class="field"><label>Nomor WhatsApp Aktif <span>*</span></label><input name="whatsapp" inputmode="tel"
+                placeholder="08xxxxxxxxxx" required></div>
+            <div class="field"><label>Email Aktif <span>*</span></label><input type="email" name="email" required></div>
+            <div class="field"><label>Instagram</label><input name="instagram" placeholder="@username"></div>
+          </div>
+        </section>
+
+        <section class="step">
+          <h2>Latar Belakang Organisasi</h2>
+          <p class="desc">Ceritakan pengalaman organisasi kamu.</p>
+          <label>Apakah kamu pernah mengikuti organisasi sebelumnya? <span>*</span></label>
+          <div class="options"><label class="opt"><input type="radio" name="pernah_organisasi" value="Ya"
+                required>Ya</label><label class="opt"><input type="radio" name="pernah_organisasi"
+                value="Belum pernah">Belum pernah</label></div>
+        </section>
+
+        <section class="step org">
+          <h2>Pengalaman Organisasi</h2>
+          <p class="desc">Section ini hanya ditampilkan jika kamu memilih pernah berorganisasi.</p>
+          <div class="field"><label>Nama organisasi yang pernah diikuti <span>*</span></label><textarea
+              name="nama_organisasi"></textarea></div>
+          <div class="grid">
+            <div class="field"><label>Jabatan / Peran</label><input name="jabatan"></div>
+            <div class="field"><label>Lama Aktif</label><input name="lama_aktif" placeholder="Contoh: 1 tahun"></div>
+          </div>
+          <div class="field"><label>Pengalaman organisasi yang paling berkesan</label><textarea
+              name="pengalaman"></textarea></div>
+        </section>
+
+        <section class="step">
+          <h2>Motivasi Ber-HMI</h2>
+          <p class="desc">Bagian ini membantu panitia memahami alasan dan harapan kamu.</p>
+          <div class="field"><label>Apa alasan utama kamu ingin bergabung dengan HMI? <span>*</span></label><textarea
+              name="alasan_hmi" required></textarea></div>
+          <div class="field"><label>Apa yang kamu ketahui tentang HMI? <span>*</span></label><textarea
+              name="pengetahuan_hmi" required></textarea></div>
+          <div class="field"><label>Apa yang kamu harapkan setelah bergabung dengan HMI? <span>*</span></label><textarea
+              name="harapan" required></textarea></div>
+          <div class="field"><label>Apa kontribusi yang ingin kamu berikan untuk HMI Komisariat UNPI?</label><textarea
+              name="kontribusi"></textarea></div>
+        </section>
+
+        <section class="step">
+          <h2>Minat & Potensi</h2>
+          <p class="desc">Pilih bidang yang sesuai dengan minat dan kemampuan kamu.</p>
+          <div class="field"><label>Bidang yang paling kamu minati <span>*</span></label>
+            <div class="options">
+              <label class="opt"><input type="checkbox" name="minat" value="Kaderisasi">Kaderisasi</label><label
+                class="opt"><input type="checkbox" name="minat" value="Keislaman">Keislaman</label><label
+                class="opt"><input type="checkbox" name="minat" value="Keilmuan">Keilmuan</label><label
+                class="opt"><input type="checkbox" name="minat" value="Sosial masyarakat">Sosial
+                masyarakat</label><label class="opt"><input type="checkbox" name="minat" value="Media & publikasi">Media
+                & publikasi</label><label class="opt"><input type="checkbox" name="minat"
+                  value="Administrasi">Administrasi</label><label class="opt"><input type="checkbox" name="minat"
+                  value="Kewirausahaan">Kewirausahaan</label><label class="opt"><input type="checkbox" name="minat"
+                  value="Seni & olahraga">Seni & olahraga</label><label class="opt"><input type="checkbox" name="minat"
+                  value="Teknologi">Teknologi</label>
+            </div>
+          </div>
+          <div class="field"><label>Kemampuan / keahlian yang kamu miliki</label>
+            <div class="options">
+              <label class="opt"><input type="checkbox" name="skill" value="Desain grafis">Desain grafis</label><label
+                class="opt"><input type="checkbox" name="skill" value="Fotografi">Fotografi</label><label
+                class="opt"><input type="checkbox" name="skill" value="Videografi">Videografi</label><label
+                class="opt"><input type="checkbox" name="skill" value="Editing video">Editing video</label><label
+                class="opt"><input type="checkbox" name="skill" value="Public speaking">Public speaking</label><label
+                class="opt"><input type="checkbox" name="skill" value="Menulis">Menulis</label><label class="opt"><input
+                  type="checkbox" name="skill" value="Teknologi/programming">Teknologi/programming</label><label
+                class="opt"><input type="checkbox" name="skill" value="Administrasi">Administrasi</label><label
+                class="opt"><input type="checkbox" name="skill" value="Manajemen acara">Manajemen acara</label>
+            </div>
+          </div>
+          <div class="field"><label>Jelaskan kemampuan dan pengalaman menggunakannya</label><textarea
+              name="skill_detail"></textarea></div>
+        </section>
+
+        <section class="step">
+          <h2>Kesiapan Kaderisasi</h2>
+          <p class="desc">Pilih jawaban yang paling sesuai dengan kesiapan kamu.</p>
+          <label>Apakah kamu bersedia mengikuti proses kaderisasi HMI? <span>*</span></label>
+          <div class="options"><label class="opt"><input type="radio" name="bersedia_kaderisasi"
+                value="Ya, saya bersedia" required>Ya, saya bersedia</label><label class="opt"><input type="radio"
+                name="bersedia_kaderisasi" value="Masih ingin mendapatkan informasi lebih lanjut">Masih ingin
+              mendapatkan informasi lebih lanjut</label><label class="opt"><input type="radio"
+                name="bersedia_kaderisasi" value="Tidak bersedia">Tidak bersedia</label></div>
+        </section>
+
+        <section class="step">
+          <h2>Kesiapan Mengikuti Kegiatan</h2>
+          <p class="desc">Informasi ini membantu panitia dalam komunikasi dan penjadwalan.</p>
+          <div class="field"><label>Bersedia mengikuti LK 1 apabila memenuhi persyaratan? <span>*</span></label>
+            <div class="options"><label class="opt"><input type="radio" name="lk1" value="Ya" required>Ya</label><label
+                class="opt"><input type="radio" name="lk1" value="Tidak">Tidak</label><label class="opt"><input
+                  type="radio" name="lk1" value="Masih mempertimbangkan">Masih mempertimbangkan</label></div>
+          </div>
+          <div class="field"><label>Bersedia mengikuti kegiatan HMI di luar jam perkuliahan? <span>*</span></label>
+            <div class="options"><label class="opt"><input type="radio" name="luar_kuliah" value="Bersedia"
+                  required>Bersedia</label><label class="opt"><input type="radio" name="luar_kuliah"
+                  value="Menyesuaikan jadwal">Menyesuaikan jadwal</label><label class="opt"><input type="radio"
+                  name="luar_kuliah" value="Tidak bersedia">Tidak bersedia</label></div>
+          </div>
+          <div class="field"><label>Ketersediaan waktu untuk kegiatan organisasi <span>*</span></label>
+            <div class="options"><label class="opt"><input type="radio" name="waktu" value="Sangat fleksibel"
+                  required>Sangat fleksibel</label><label class="opt"><input type="radio" name="waktu"
+                  value="Cukup fleksibel">Cukup fleksibel</label><label class="opt"><input type="radio" name="waktu"
+                  value="Terbatas">Terbatas</label></div>
+          </div>
+          <div class="field"><label>Kendala yang mungkin memengaruhi keikutsertaan</label><textarea
+              name="kendala"></textarea></div>
+        </section>
+
+        <section class="step">
+          <h2>Foto & Dokumen</h2>
+          <p class="desc">Unggah dokumen yang diminta. File akan diproses oleh sistem penerima yang kamu pasang nanti.
+          </p>
+          <div class="notice">Data jawaban akan dikirim ke Google Sheets. File foto/KTM/dokumen belum diunggah ke
+            penyimpanan dan akan ditambahkan pada tahap berikutnya.</div>
+          <div class="field"><label>Foto Terbaru <span>*</span></label><input type="file" name="foto"
+              accept=".jpg,.jpeg,.png" required></div>
+          <div class="field"><label>KTM / Kartu Mahasiswa</label><input type="file" name="ktm"
+              accept=".jpg,.jpeg,.png,.pdf"></div>
+          <div class="field"><label>Dokumen Pendukung Lainnya</label><input type="file" name="dokumen"
+              accept=".jpg,.jpeg,.png,.pdf"></div>
+        </section>
+
+        <section class="step">
+          <h2>Sumber Informasi</h2>
+          <p class="desc">Bagaimana kamu mengetahui Open Rekrutmen HMI Komisariat UNPI?</p>
+          <div class="field"><label>Sumber informasi <span>*</span></label>
+            <div class="options"><label class="opt"><input type="radio" name="sumber" value="Instagram"
+                  required>Instagram</label><label class="opt"><input type="radio" name="sumber"
+                  value="WhatsApp">WhatsApp</label><label class="opt"><input type="radio" name="sumber"
+                  value="Teman">Teman</label><label class="opt"><input type="radio" name="sumber"
+                  value="Pengurus HMI">Pengurus HMI</label><label class="opt"><input type="radio" name="sumber"
+                  value="Kegiatan kampus">Kegiatan kampus</label><label class="opt"><input type="radio" name="sumber"
+                  value="Poster">Poster</label><label class="opt"><input type="radio" name="sumber"
+                  value="Lainnya">Lainnya</label></div>
+          </div>
+          <div class="field"><label>Jika melalui teman/pengurus, tuliskan namanya</label><input name="referensi"></div>
+        </section>
+
+        <section class="step">
+          <h2>Pernyataan & Persetujuan</h2>
+          <p class="desc">Baca dan centang semua pernyataan berikut.</p>
+          <div class="options">
+            <label class="opt"><input type="checkbox" name="setuju_data" required>Saya menyatakan bahwa seluruh data
+              yang saya berikan benar dan dapat dipertanggungjawabkan.</label>
+            <label class="opt"><input type="checkbox" name="setuju_kaderisasi" required>Saya bersedia mengikuti proses
+              seleksi dan kaderisasi HMI Komisariat UNPI sesuai ketentuan yang berlaku.</label>
+            <label class="opt"><input type="checkbox" name="setuju_kontak" required>Saya bersedia dihubungi panitia
+              melalui kontak yang saya cantumkan.</label>
+          </div>
+        </section>
+
+        <section class="step">
+          <h2>Konfirmasi</h2>
+          <p class="desc">Periksa kembali data kamu sebelum mengirim pendaftaran.</p>
+          <div class="notice">Pastikan nama, NIM, nomor WhatsApp, email, dan jawaban penting sudah benar. Setelah
+            dikirim, data akan diteruskan ke endpoint yang kamu konfigurasi.</div>
+          <label class="opt"><input type="checkbox" name="konfirmasi" required>Ya, saya sudah memeriksa dan siap
+            mengirimkan formulir.</label>
+        </section>
+
+        <div class="nav"><button type="button" class="btn back" id="back">← Kembali</button><button type="button"
+            class="btn next" id="next">Lanjut →</button></div>
+      </form>
+    </div>
+
+    <div class="card success hidden" id="success">
+      <div class="check">✓</div>
+      <h2>Pendaftaran Selesai</h2>
+      <p class="muted">Pendaftaran kamu sudah dikirim. Jawaban teks masuk ke Google Sheets dengan status Menunggu.</p>
+      <button class="btn next" onclick="location.reload()">Kembali ke Form</button>
+    </div>
+  </div>
+  <script>
+    const form = document.getElementById('form'), steps = [...document.querySelectorAll('.step')], bar = document.getElementById('bar'), label = document.getElementById('stepLabel'), percent = document.getElementById('percent'), back = document.getElementById('back'), next = document.getElementById('next');
+    let current = 0;
+    function visibleSteps() { const org = document.querySelector('input[name="pernah_organisasi"]:checked')?.value === 'Ya'; return steps.filter(s => !s.classList.contains('org') || org) }
+    function update() { const vs = visibleSteps(); if (current >= vs.length) current = vs.length - 1; steps.forEach(s => s.classList.remove('active')); vs[current].classList.add('active'); const p = Math.round(((current + 1) / vs.length) * 100); bar.style.width = p + '%'; label.textContent = `Langkah ${current + 1} dari ${vs.length}`; percent.textContent = p + '%'; back.style.visibility = current === 0 ? 'hidden' : 'visible'; next.textContent = current === vs.length - 1 ? 'Kirim Pendaftaran →' : 'Lanjut →' }
+    function validate() { const active = visibleSteps()[current]; for (const el of active.querySelectorAll('input,select,textarea')) { if (!el.checkValidity()) { el.reportValidity(); return false } } return true }
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwtFRgT7EGc7yR4IBzaDoUHvsxoQ0ReX1EX6mQ8EUpJ37G4EnC89rstH1bPDSASJIV-Mw/exec";
+    async function submitToSheets() {
+      const payload = new URLSearchParams();
+      const fd = new FormData(form);
+      for (const [key, value] of fd.entries()) {
+        if (value instanceof File) continue;
+        payload.append(key, value);
+      }
+      for (const name of ["minat", "skill"]) {
+        payload.delete(name);
+        form.querySelectorAll(`input[name="${name}"]:checked`).forEach(el => payload.append(name, el.value));
+      }
+      next.disabled = true;
+      next.textContent = "Mengirim...";
+      try {
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+          body: payload.toString()
+        });
+        form.closest('#formCard').classList.add('hidden');
+        document.getElementById('success').classList.remove('hidden');
+      } catch (err) {
+        alert("Data belum terkirim. Periksa koneksi internet lalu coba lagi.");
+        next.disabled = false;
+        next.textContent = "Kirim Pendaftaran →";
+      }
+    }
+    next.onclick = () => { if (!validate()) return; const vs = visibleSteps(); if (current < vs.length - 1) { current++; update() } else { submitToSheets() } }
+    back.onclick = () => { if (current > 0) { current--; update() } }
+    form.addEventListener('change', e => { if (e.target.name === 'pernah_organisasi') update() })
+    update();
+  </script>
+</body>
+
+</html>
